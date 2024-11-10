@@ -2,20 +2,112 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-decoration: none;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+/* -----Navigation bar------ */
+nav {
+  width: 100%;
+  padding: 10px 5px;
+  background-color: whitesmoke;
+  box-shadow: 3px 2px 4px #000;
+  position: fixed;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+}
+nav img {
+  margin: 3px 0 10px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-btn {
+  padding: 2px 10px;
+  background-color: #00628f;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-btn i {
+  color: #fff;
+  font-size: 30px;
+}
+.offcanvas {
+  width: 100%;
+  background-color: whitesmoke;
+}
+.offcanvas a {
+  color: #00628f;
+  padding: 20px;
+  list-style-type: none;
+  text-decoration: none;
+}
+.offcanvas li:active {
+  color: #fff;
+  background-color: #00628f;
+  width: active;
+  height: 5v;
+}
+.offcanvas li:after {
+  color: #fff;
+  background-color: #00628f;
+}
+.offcanvas ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.offcanvas li {
+  color: #00628f;
+  font-weight: bold;
+}
+.offcanvas li:hover {
+  color: #fff;
+  background-color: #00628f;
+  width: 100%;
+  height: auto;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
+
+.dot-loader {
+  width: 20px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side, #00628f 90%, #0000);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
+  animation: l3 1s infinite linear;
+}
+.dot-loader-2 {
+  width: 20px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side, #ca8a04 90%, #0000);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  20% {
+    background-position: 0% 0%, 50% 50%, 100% 50%;
+  }
+  40% {
+    background-position: 0% 100%, 50% 0%, 100% 50%;
+  }
+  60% {
+    background-position: 0% 50%, 50% 100%, 100% 0%;
+  }
+  80% {
+    background-position: 0% 50%, 50% 50%, 100% 100%;
+  }
 }
