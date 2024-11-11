@@ -14,7 +14,7 @@ const NavbarDropdown = () => {
   useEffect(() => {
     setAdmin(UserStorage.get());
   }, []);
-
+  console.log(admin);
   return (
     <div className="relative">
       <Image
