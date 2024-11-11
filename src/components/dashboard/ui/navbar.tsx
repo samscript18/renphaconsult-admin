@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import NavbarDropdown from "./navbarDropdown";
 import NavDropdown from "./navDropdown";
-import logo from "../../../../public/images/logos/logo1.png";
+import logo from "../../../../public/assets/logo1.png";
 
 const Navbar = () => {
   const pathname = usePathname();

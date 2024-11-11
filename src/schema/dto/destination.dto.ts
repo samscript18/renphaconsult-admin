@@ -12,3 +12,12 @@ export type CreateDestinationDto = {
   totalRatings?: number;
   averageRating?: number;
 };
+
+export type EditDestinationDto = {
+  name?: string;
+  description?: string;
+  mainImage?: string;
+  gallery?: string[];
+  budget?: number;
+  location?: string;
+};

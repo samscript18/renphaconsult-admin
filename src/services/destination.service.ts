@@ -1,6 +1,9 @@
 import { https } from "@/lib/config/axios.config";
 import { errorHandler } from "@/lib/utils/error";
-import { CreateDestinationDto } from "@/schema/dto/destination.dto";
+import {
+  CreateDestinationDto,
+  EditDestinationDto,
+} from "@/schema/dto/destination.dto";
 import { Destination } from "@/schema/interfaces/destination.interface";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -61,6 +64,25 @@ export const useGetDestination = (destinationId: string) => {
   });
 
   return query;
+};
+
+export const useEditDestination = (destinationId: string) => {
+  const payload = useMutation({
+    mutationKey: ["useEditDestination"],
+    mutationFn: async (data: EditDestinationDto) => {
+      const response = await https.patch<Destination>(
+        `/destination/${destinationId}`,
+        data
+      );
+
+      return response?.data;
+    },
+    onError(error) {
+      return errorHandler(error);
+    },
+  });
+
+  return payload;
 };
 
 export const useDeleteDestination = (destinationId: string) => {

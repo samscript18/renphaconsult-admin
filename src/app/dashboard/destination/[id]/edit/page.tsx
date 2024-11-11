@@ -1,38 +1,46 @@
 "use client";
 
 import { ButtonContained } from "@/components/ui/buttons";
+import Loader from "@/components/ui/loader";
 import TextField from "@/components/ui/textField";
 import { uploadFile } from "@/lib/utils/file";
-import { useCreateDestination } from "@/services/destination.service";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { Destination } from "@/schema/interfaces/destination.interface";
+import {
+  useEditDestination,
+  useGetDestination,
+} from "@/services/destination.service";
+import { useParams, useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const CreateDestinationPage = () => {
+const EditDestinationPage = () => {
+  const { id: destinationId } = useParams<{ id: string }>();
+  const { data: destinationData, isPending } = useGetDestination(destinationId);
+  const destination: Destination = destinationData;
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [mainImage, setMainImage] = useState<File>();
   const [gallery, setGallery] = useState<FileList>();
   const [location, setLocation] = useState<string>("");
   const [budget, setBudget] = useState<number>();
-  const payload = useCreateDestination();
+  const payload = useEditDestination(destinationId);
   const { push } = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!mainImage || !gallery) {
-      toast.error("select image/images");
-      return;
+    let destinationBgImage, destinationGallery;
+    if (mainImage) {
+      destinationBgImage = await uploadFile(mainImage);
     }
-    const destinationBgImage = await uploadFile(mainImage);
-    const destinationGallery = await Promise.all(
-      Array.from(gallery).map(async (image) => {
-        const url = await uploadFile(image);
-        return url;
-      })
-    );
+    if (gallery) {
+      destinationGallery = await Promise.all(
+        Array.from(gallery).map(async (image) => {
+          const url = await uploadFile(image);
+          return url;
+        })
+      );
+    }
 
-    console.log(destinationGallery);
     await payload.mutateAsync({
       name,
       description,
@@ -41,8 +49,27 @@ const CreateDestinationPage = () => {
       location,
       budget: budget!,
     });
+    toast.success("Destination edited successfully");
     push("/dashboard/destination");
   };
+
+  useEffect(() => {
+    setName(destination?.name);
+    setDescription(destination?.description);
+    setLocation(destination?.location);
+    setBudget(destination?.budget);
+  }, [destination]);
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center mt-[6.5rem]">
+        <Loader
+          loading={isPending}
+          loadingText="Fetching Destination Details..."
+        />
+      </div>
+    );
+  }
   return (
     <section className="mt-[6.5rem]">
       <h1 className="text-[1.25rem] my-3 font-bold capitalize text-center">
@@ -58,7 +85,6 @@ const CreateDestinationPage = () => {
                 name: "name",
                 placeholder: "Name of the Destination",
                 type: "text",
-                required: true,
                 value: name,
                 onChange(e) {
                   setName(e.target.value);
@@ -75,7 +101,6 @@ const CreateDestinationPage = () => {
                 name: "description",
                 placeholder: "Description of the Destination",
                 type: "text",
-                required: true,
                 value: description,
                 onChange(e) {
                   setDescription(e.target.value);
@@ -94,7 +119,6 @@ const CreateDestinationPage = () => {
                 id="destinationBgImage"
                 className="w-full p-2 outline-none text-[#444] text-[.8rem] bg-gray-100 rounded-md border-[1.5px] focus:border-primary"
                 accept="image/*"
-                required
                 onChange={(e) => setMainImage(e.target?.files?.[0])}
               />
             </div>
@@ -109,7 +133,6 @@ const CreateDestinationPage = () => {
                 id="destinationGallery"
                 className="w-full p-2 outline-none text-[#444] text-[.8rem] bg-gray-100 rounded-md border-[1.5px] focus:border-primary"
                 accept="image/*"
-                required
                 multiple
                 onChange={(e) => {
                   const files = e.target?.files;
@@ -124,7 +147,6 @@ const CreateDestinationPage = () => {
               InputProps={{
                 placeholder: "Location of the destination",
                 type: "text",
-                required: true,
                 value: location,
                 onChange(e) {
                   setLocation(e.target.value);
@@ -158,11 +180,11 @@ const CreateDestinationPage = () => {
             loadingText="Creating Destination..."
             className="max-w-fit ml-auto mt-5"
           >
-            Create Destination
+            Edit Destination
           </ButtonContained>
         </div>
       </form>
     </section>
   );
 };
-export default CreateDestinationPage;
+export default EditDestinationPage;

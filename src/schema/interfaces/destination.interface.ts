@@ -14,7 +14,7 @@ export interface Destination extends DefaultModel {
   mainImage: string;
   gallery: string[];
   budget: number;
-  location: number;
+  location: string;
   reviews: Review[];
   totalReviews: number;
   totalRatings: number;

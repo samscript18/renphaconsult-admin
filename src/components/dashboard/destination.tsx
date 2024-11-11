@@ -2,23 +2,33 @@ import { Destination as IDestination } from "@/schema/interfaces/destination.int
 import Image from "next/image";
 import { ButtonOutlined } from "../ui/buttons";
 import Link from "next/link";
-import img from "../../../public/images/img-1.jpg";
+import img from "../../../public/assets/img-1.jpg";
 import { formatValue } from "@/lib/utils/format.utils";
 
 const Destination = ({
   _id,
   name,
   description,
-  // mainImage,
+  mainImage,
   budget,
 }: IDestination) => {
   return (
     <article className="w-full bg-[#fff] my-[2rem] rounded-md shadow-md">
-      <Image
-        src={img}
-        alt={name}
-        className="w-auto h-[250px] object-cover rounded-t-md"
-      />
+      {mainImage ? (
+        <Image
+          src={mainImage}
+          alt={name}
+          width={400}
+          height={250}
+          className="w-auto h-[250px] object-cover rounded-t-md"
+        />
+      ) : (
+        <Image
+          src={img}
+          alt={name}
+          className="w-auto h-[250px] object-cover rounded-t-md"
+        />
+      )}
       <footer className="py-[1.5rem] px-[0.6rem]">
         <div className="flex justify-between items-center mb-[1.5rem]">
           <h4 className="mb-0 text-[1rem] font-semibold">{name}</h4>

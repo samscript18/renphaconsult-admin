@@ -56,7 +56,7 @@ const Profile = () => {
   return (
     <section>
       {isPending && (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mt-[8rem]">
           <Loader
             loading={isPending}
             loadingText="Fetching Profile Details..."

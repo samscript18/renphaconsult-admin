@@ -7,8 +7,8 @@ import {
   useGetDestination,
 } from "@/services/destination.service";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import img from "../../../../../public/images/austrialia-1.jpg";
+import { useParams, useRouter } from "next/navigation";
+import img from "../../../../../public/assets/austrialia-1.jpg";
 import { Destination, Review } from "@/schema/interfaces/destination.interface";
 import { formatValue } from "@/lib/utils/format.utils";
 import {
@@ -18,23 +18,18 @@ import {
 import { ButtonContained } from "@/components/ui/buttons";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DestinationPage = () => {
   const [reviewId, setReviewId] = useState<string>("");
+  const [reviews, setReviews] = useState<Review[]>();
   const { id: destinationId } = useParams<{ id: string }>();
   const { data: destinationData, isPending } = useGetDestination(destinationId);
   const { data: reviewsData } = useGetDestinationReviews(destinationId);
   const destination: Destination = destinationData;
-  const reviews: Review[] = reviewsData;
   const payload = useDeleteDestination(destinationId);
   const mutation = useDeleteReview(reviewId!);
-  const gallery = [
-    { id: 1, img },
-    { id: 2, img },
-    { id: 3, img },
-    { id: 4, img },
-  ];
+  const { push } = useRouter();
 
   const deleteReview = async (id: string) => {
     if (id === reviewId) {
@@ -43,6 +38,10 @@ const DestinationPage = () => {
     }
     return;
   };
+
+  useEffect(() => {
+    setReviews(reviewsData);
+  }, [reviewsData]);
 
   return (
     <div className="w-full h-full mt-[8rem]">
@@ -53,7 +52,7 @@ const DestinationPage = () => {
         />
       ) : (
         <>
-          {gallery.length === 0 ? (
+          {destination.gallery?.length === 0 ? (
             <Image
               key={destination._id}
               src={img}
@@ -62,12 +61,14 @@ const DestinationPage = () => {
             />
           ) : (
             <ScrollContainers>
-              {gallery.map((image) => {
+              {destination.gallery?.map((image, index) => {
                 return (
                   <Image
-                    key={image.id}
-                    src={image.img}
+                    key={index}
+                    src={image}
                     alt={destination.name}
+                    width={250}
+                    height={250}
                     className="w-auto h-[250px]"
                   />
                 );
@@ -90,18 +91,18 @@ const DestinationPage = () => {
           </div>
           <div className="my-[2rem]">
             <h2 className="text-[1.25rem] font-bold mb-6">Reviews</h2>
-            {reviews.map((review) => {
+            {reviews?.map((review) => {
               return (
                 <div
                   key={review._id}
-                  className="flex justify-start items-center"
+                  className="flex justify-start items-start"
                 >
                   <Image
                     src={review.user?.profilePicture as string}
                     alt={review.user?.firstName}
                     width={35}
                     height={35}
-                    className="rounded-full"
+                    className="rounded-full mr-6"
                   />
                   <div className="flex flex-col">
                     <p className="mb-2.5 text-[1rem] font-semibold">
@@ -123,14 +124,24 @@ const DestinationPage = () => {
               );
             })}
           </div>
-          <div className="flex justify-center md:justify-start items-center my-8">
+          <div className="flex justify-center items-center my-8 gap-10">
             <ButtonContained
               type="button"
-              className="w-[100px] no-underline md:w-[200px]"
+              className="w-auto no-underline md:w-[200px]"
+              onClick={() => {
+                push(`/dashboard/destination/${destination._id}/edit`);
+              }}
+            >
+              Edit Destination
+            </ButtonContained>
+            <ButtonContained
+              type="button"
+              className="w-auto no-underline md:w-[200px]"
               loading={payload.isPending}
               disabled={payload.isPending}
               onClick={async () => {
                 await payload.mutateAsync();
+                push("/dashboard/destination");
                 toast.success("Destination has been deleted successfully");
               }}
             >
