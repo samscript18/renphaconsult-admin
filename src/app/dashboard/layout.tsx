@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: Props) {
   return (
     <>
       {isPending ? (
-        <div className="flex justify-center items-center mt-[40%]">
+        <div className="flex justify-center items-center mt-[25%]">
           <DotLoader />
         </div>
       ) : (
