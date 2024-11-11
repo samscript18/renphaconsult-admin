@@ -43,7 +43,7 @@ export default function Register() {
       <div>
         <h1 className="text-[1.3rem] font-bold">Sign Up</h1>
         <p className="text-[.85rem] mt-2">
-          Create your RenphaConsulting Account
+          Create your RenphaConsulting Admin Account
         </p>
       </div>
 

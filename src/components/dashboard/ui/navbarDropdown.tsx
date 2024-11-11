@@ -18,10 +18,7 @@ const NavbarDropdown = () => {
   return (
     <div className="relative">
       <Image
-        src={
-          (admin?.profilePicture as string) ||
-          "https://res.cloudinary.com/dynopc0cn/image/upload/v1728734784/avatar_ym1ctb.jpg"
-        }
+        src={admin?.profilePicture as string}
         alt="profile"
         width={40}
         height={40}

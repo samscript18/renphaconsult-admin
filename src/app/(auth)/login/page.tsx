@@ -28,7 +28,7 @@ export default function Login() {
       <div>
         <h1 className="text-[1.3rem] font-bold">Sign In</h1>
         <p className="text-[.85rem] mt-2">
-          Kindly sign in to your RenphaConsulting account
+          Kindly sign in to your RenphaConsulting Admin account
         </p>
       </div>
 
