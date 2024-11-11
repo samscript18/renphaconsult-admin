@@ -1,20 +1,20 @@
-import { User } from "@/schema/interfaces/admin.interface";
+import { Admin } from "@/schema/interfaces/admin.interface";
 
 enum StorageItems {
-  USER = "user",
+  ADMIN = "admin",
   TOKEN = "accessToken",
 }
 
 export class UserStorage {
-  static store(user: User) {
+  static store(admin: Admin) {
     if (typeof window != "undefined") {
-      localStorage.setItem(StorageItems.USER, JSON.stringify(user));
+      localStorage.setItem(StorageItems.ADMIN, JSON.stringify(admin));
     }
   }
 
-  static get(): User | null {
+  static get(): Admin | null {
     if (typeof window != "undefined") {
-      const userStorage = localStorage.getItem(StorageItems.USER);
+      const userStorage = localStorage.getItem(StorageItems.ADMIN);
 
       return userStorage ? JSON.parse(userStorage) : null;
     }
@@ -23,7 +23,7 @@ export class UserStorage {
 
   static remove() {
     if (typeof window != "undefined") {
-      localStorage.removeItem(StorageItems.USER);
+      localStorage.removeItem(StorageItems.ADMIN);
     }
   }
 }
